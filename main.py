@@ -4,6 +4,7 @@ import time
 from lxml import html, etree
 import subprocess
 import sys
+import os
 
 # Function to check if Playwright is installed and install it if not
 def ensure_playwright_installed():
@@ -12,7 +13,8 @@ def ensure_playwright_installed():
     except ImportError:
         st.warning("Playwright is not installed. Installing now...")
         subprocess.check_call([sys.executable, "-m", "pip", "install", "playwright"])
-        subprocess.check_call(["playwright", "install"])
+        os.system('playwright install')
+        os.system('playwright install-deps')
         st.success("Playwright installed successfully.")
 
 # Function to fetch HTML content with Playwright
