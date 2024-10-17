@@ -2,6 +2,18 @@ import streamlit as st
 from playwright.sync_api import sync_playwright
 import time
 from lxml import html, etree
+import subprocess
+import sys
+
+# Function to check if Playwright is installed and install it if not
+def ensure_playwright_installed():
+    try:
+        import playwright
+    except ImportError:
+        st.warning("Playwright is not installed. Installing now...")
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "playwright"])
+        subprocess.check_call(["playwright", "install"])
+        st.success("Playwright installed successfully.")
 
 # Function to fetch HTML content with Playwright
 def fetch_html_with_playwright(url, delay, load_js):
@@ -25,7 +37,7 @@ def clean_html(html_content):
     tree = html.fromstring(html_content)
     
     # Remove unnecessary elements
-    for bad in tree.xpath("//script|//style|//svg|//meta|//comment()"):
+    for bad in tree.xpath("//script|//style|//svg|//comment()"):
         bad.getparent().remove(bad)
     
     # Remove attributes that are not useful for scraping
@@ -57,6 +69,9 @@ def xpath_to_css(xpath):
     css_selector = css_selector.replace(']', '').replace('[', '[')
     css_selector = css_selector.replace('=', '=')
     return css_selector
+
+# Ensure Playwright is installed
+ensure_playwright_installed()
 
 # Streamlit app
 st.title("XPath and CSS Selector Extractor")
