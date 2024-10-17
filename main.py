@@ -12,10 +12,41 @@ def ensure_playwright_installed():
         import playwright
     except ImportError:
         st.warning("Playwright is not installed. Installing now...")
+        install_playwright()
+
+# Function to install Playwright using multiple methods
+def install_playwright():
+    st.subheader("Installing Playwright")
+    log_area = st.empty()
+    log_area.text("Starting Playwright installation...")
+
+    # Method 1: Using subprocess
+    log_area.text("Method 1: Using subprocess")
+    try:
         subprocess.check_call([sys.executable, "-m", "pip", "install", "playwright"])
+        log_area.text("Playwright installed successfully using subprocess.")
+    except Exception as e:
+        log_area.text(f"Error installing Playwright using subprocess: {e}")
+
+    # Method 2: Using os.system
+    log_area.text("Method 2: Using os.system")
+    try:
         os.system('playwright install')
         os.system('playwright install-deps')
-        st.success("Playwright installed successfully.")
+        log_area.text("Playwright installed successfully using os.system.")
+    except Exception as e:
+        log_area.text(f"Error installing Playwright using os.system: {e}")
+
+    # Method 3: Opening terminal and using sudo
+    log_area.text("Method 3: Opening terminal and using sudo")
+    try:
+        os.system('sudo playwright install')
+        os.system('sudo playwright install-deps')
+        log_area.text("Playwright installed successfully using sudo.")
+    except Exception as e:
+        log_area.text(f"Error installing Playwright using sudo: {e}")
+
+    st.success("Playwright installed successfully.")
 
 # Function to fetch HTML content with Playwright
 def fetch_html_with_playwright(url, delay, load_js):
